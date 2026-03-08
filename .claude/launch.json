@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "NativeVibe Dev",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["/Users/pt/NativeVibe/.claude/run-dev.sh"],
+      "port": 3000
+    },
+    {
+      "name": "NativeVibe Production",
+      "runtimeExecutable": "/Users/pt/.nvm/versions/node/v22.22.0/bin/node",
+      "runtimeArgs": ["/Users/pt/NativeVibe/node_modules/.bin/next", "start"],
+      "port": 3000
+    },
+    {
+      "name": "FeedMeI Web",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["/Users/pt/NativeVibe/.claude/run-feedmei.sh"],
+      "port": 8082
+    }
+  ]
+}

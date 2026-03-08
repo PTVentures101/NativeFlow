@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export PATH=\"$PATH:/usr/local/bin:/opt/homebrew/bin:/opt/homebrew/opt/node/bin\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(lsof -ti :3000)",
+      "Bash(xargs kill -9)",
+      "Bash(export NVM_DIR=\"$HOME/.nvm\")",
+      "Bash(source \"$NVM_DIR/nvm.sh\")",
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "Bash(npx create-expo-app@latest FeedMeI --yes)",
+      "Bash($HOME/.nvm/versions/node/v22.22.0/bin/node --version)",
+      "Bash($HOME/.nvm/versions/node/v22.22.0/bin/npx --version)",
+      "Bash(npx expo install expo-camera expo-image-picker expo-file-system @react-native-async-storage/async-storage)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(export NVM_DIR=\"/Users/pt/.nvm\")",
+      "Bash(source \"/Users/pt/.nvm/nvm.sh\")",
+      "Bash(chmod +x /Users/pt/NativeVibe/.claude/run-feedmei.sh)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(curl -s -o /tmp/test-audio.mp3 -w \"%{http_code}\" -X POST http://localhost:3001/api/audio -H \"Content-Type: application/json\" -d '{\"\"text\"\":\"\"Hola, ¿cómo estás?\"\",\"\"language\"\":\"\"spanish\"\",\"\"region\"\":\"\"spain\"\"}')",
+      "Bash(node -e \"const p = require\\(''/Users/pt/NativeVibe/node_modules/next/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(test -f /Users/pt/NativeVibe/vercel.json)"
+    ]
+  }
+}
