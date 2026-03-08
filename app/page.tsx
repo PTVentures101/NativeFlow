@@ -48,7 +48,7 @@ export default function Home() {
       setErrorMessage("Network error. Check your connection and try again.");
       setAppState("error");
     }
-  }, [query, location]);
+  }, [query, location, sourceLang]);
 
   const reset = () => { setQuery(""); setAppState("idle"); setResult(null); setErrorMessage(""); setLocation(""); setSubmittedQuery(""); };
 

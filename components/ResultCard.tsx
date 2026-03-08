@@ -75,7 +75,7 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
               </svg>
             </span>
             <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-              Here's how locals say it
+              Here&apos;s how locals say it
             </span>
           </div>
           <div className="text-right">

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { PhrasesResult, PhraseSuggestion } from "@/lib/phrases";
-import { speakText, getLocale, stopAllAudio } from "@/hooks/useAudio";
+import { speakText, stopAllAudio } from "@/hooks/useAudio";
 import { SaveButton } from "./SaveButton";
 
 interface PhrasesPanelProps {
