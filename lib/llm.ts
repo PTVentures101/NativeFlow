@@ -19,7 +19,7 @@ const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
 export async function analyzePhrase(query: string, sourceLang = "English"): Promise<AnalysisResult> {
   const model = genai.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.0-flash",
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.3,
