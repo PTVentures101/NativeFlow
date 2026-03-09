@@ -11,11 +11,27 @@ import { useSourceLanguageContext } from "@/contexts/SourceLanguageContext";
 
 type AppState = "idle" | "loading" | "result" | "error";
 
-const EXAMPLES = [
-  'Is "dos cervezas porfa" natural for casual Spanish in Málaga?',
-  'Would "c\'est trop stylé" sound natural from a young person in Lyon?',
-  'Does "ich hab keine Ahnung" work in a Munich office?',
-  'Is "fare una passeggiata stasera?" natural in Naples?',
+const EXAMPLES: { label: string; query: string; location: string }[] = [
+  {
+    label: 'Is "dos cervezas porfa" natural for casual Spanish in Málaga?',
+    query: "dos cervezas porfa",
+    location: "Málaga",
+  },
+  {
+    label: 'Would "c\'est trop stylé" sound natural from a young person in Lyon?',
+    query: "c'est trop stylé",
+    location: "Lyon",
+  },
+  {
+    label: 'Does "ich hab keine Ahnung" work in a Munich office?',
+    query: "ich hab keine Ahnung",
+    location: "Munich",
+  },
+  {
+    label: 'Is "fare una passeggiata stasera?" natural in Naples?',
+    query: "fare una passeggiata stasera?",
+    location: "Naples",
+  },
 ];
 
 const EXAMPLE_CHIP = "border-black/[0.10] bg-black/[0.03] dark:border-white/[0.10] dark:bg-white/[0.03] text-[#6c6c70] dark:text-[#86868b] hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400/30 hover:bg-indigo-500/[0.04]";
@@ -93,11 +109,11 @@ export default function Home() {
             <div className="flex flex-col gap-2">
               {EXAMPLES.map((ex) => (
                 <button
-                  key={ex}
-                  onClick={() => { setQuery(ex); setAppState("idle"); }}
+                  key={ex.label}
+                  onClick={() => { setQuery(ex.query); setLocation(ex.location); setAppState("idle"); }}
                   className={`text-left text-xs font-medium px-3 py-1.5 rounded-full border transition-colors leading-relaxed ${EXAMPLE_CHIP}`}
                 >
-                  {ex}
+                  {ex.label}
                 </button>
               ))}
             </div>

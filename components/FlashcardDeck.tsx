@@ -140,11 +140,11 @@ export function FlashcardDeck() {
               <p className="text-sm text-[#86868b] text-center">{currentCard.note}</p>
             )}
             <div className="flex items-center justify-center gap-2 mt-1 flex-wrap">
-              <span className="inline-flex items-center text-[10px] font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-500/8 dark:bg-indigo-500/10 border border-indigo-500/15 rounded-full px-2.5 py-0.5">
-                {currentCard.detectedRegion}
-              </span>
               <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
                 {currentCard.detectedLanguage}
+              </span>
+              <span className="inline-flex items-center text-[10px] font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-500/8 dark:bg-indigo-500/10 border border-indigo-500/15 rounded-full px-2.5 py-0.5">
+                {currentCard.detectedRegion.split(",")[0].trim()}
               </span>
             </div>
           </div>

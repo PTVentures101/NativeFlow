@@ -136,7 +136,10 @@ export function PhrasesPanel({ originalQuery, correction, detectedLanguage, dete
                   {result.situation}
                 </span>
                 <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
-                  {detectedRegion}
+                  {detectedLanguage}
+                </span>
+                <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
+                  {detectedRegion.split(",")[0].trim()}
                 </span>
               </div>
 
