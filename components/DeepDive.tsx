@@ -8,6 +8,8 @@ interface DeepDiveProps {
   detectedLanguage: string;
 }
 
+const CATEGORY_ORDER = ["Tone", "Vocab", "Pronunciation", "Native Touch", "Etymology"];
+
 export function DeepDive({ bullets, detectedRegion, detectedLanguage }: DeepDiveProps) {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -51,7 +53,11 @@ export function DeepDive({ bullets, detectedRegion, detectedLanguage }: DeepDive
 
           {/* Bullet list */}
           <ul className="space-y-2">
-            {bullets.map((bullet, i) => {
+            {[...bullets].sort((a, b) => {
+              const iA = CATEGORY_ORDER.indexOf(a.split(":")[0].trim());
+              const iB = CATEGORY_ORDER.indexOf(b.split(":")[0].trim());
+              return (iA === -1 ? 99 : iA) - (iB === -1 ? 99 : iB);
+            }).map((bullet, i) => {
               const colonIdx = bullet.indexOf(":");
               const keyword = colonIdx > -1 ? bullet.slice(0, colonIdx) : null;
               const body = colonIdx > -1 ? bullet.slice(colonIdx + 1).trim() : bullet;
