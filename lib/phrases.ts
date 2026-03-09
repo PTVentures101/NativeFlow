@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Anthropic from "@anthropic-ai/sdk";
 
 export interface PhraseSuggestion {
   phrase: string;
@@ -43,7 +43,7 @@ QUALITY BAR:
 - Each phrase should be distinct and cover a different micro-moment in the scenario`;
 }
 
-const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 export async function getSituationalPhrases(
   originalQuery: string,
@@ -52,15 +52,6 @@ export async function getSituationalPhrases(
   correction: string,
   sourceLang = "English"
 ): Promise<PhrasesResult> {
-  const model = genai.getGenerativeModel({
-    model: "gemini-2.5-flash",
-    generationConfig: {
-      responseMimeType: "application/json",
-      temperature: 0.4,
-    },
-    systemInstruction: buildPhrasesSystemPrompt(sourceLang),
-  });
-
   const prompt = `Original query: "${originalQuery}"
 Authentic local correction: "${correction}"
 Detected language: ${detectedLanguage}
@@ -72,8 +63,14 @@ Do NOT include the "Authentic local correction" phrase itself as one of the sugg
 
 Provide situational phrases for this scenario.`;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text().trim();
+  const message = await anthropic.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 1024,
+    system: buildPhrasesSystemPrompt(sourceLang),
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  const text = message.content[0].type === "text" ? message.content[0].text.trim() : "";
   const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
 
   const parsed = JSON.parse(cleaned) as PhrasesResult;

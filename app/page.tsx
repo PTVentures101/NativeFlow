@@ -125,7 +125,7 @@ export default function Home() {
       <footer className="fixed bottom-0 left-0 right-0 hidden sm:block border-t border-black/[0.06] dark:border-white/[0.06] bg-[#f5f5f7]/80 dark:bg-[#09090b]/80 backdrop-blur-xl">
         <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-between">
           <span className="text-[11px] text-[#86868b]">Free · 10 checks / day</span>
-          <span className="text-[11px] text-[#86868b]">Gemini 2.5 Flash</span>
+          <span className="text-[11px] text-[#86868b]">Claude Haiku</span>
         </div>
       </footer>
     </div>
