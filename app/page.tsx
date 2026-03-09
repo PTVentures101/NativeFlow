@@ -132,7 +132,7 @@ export default function Home() {
       </main>
 
       {/* ── Footer ────────────────────────────────────────── */}
-      <footer className="fixed bottom-0 left-0 right-0 hidden sm:block border-t border-black/[0.06] dark:border-white/[0.06] bg-[#faf8f5] dark:bg-[#09090b]">
+      <footer className="fixed bottom-0 left-0 right-0 hidden sm:block z-20 border-t border-black/[0.06] dark:border-white/[0.06] bg-[#faf8f5] dark:bg-[#09090b]">
         <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-center gap-3">
           <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors">Free · 10 checks / day</a>
           <span className="text-[#86868b]/30">·</span>
