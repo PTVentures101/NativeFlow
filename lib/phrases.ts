@@ -40,7 +40,9 @@ QUALITY BAR:
 - Match the register — if the query is casual, all phrases should be casual
 - Prefer phrases a textbook would never teach: contractions, colloquial shortcuts, local idioms
 - No generic filler phrases (no "hello", "how are you", "thank you" unless they are genuinely scenario-relevant)
-- Each phrase should be distinct and cover a different micro-moment in the scenario`;
+- Each phrase should be distinct and cover a different micro-moment in the scenario
+
+STYLE: Avoid em dashes (—). Use commas or short sentences instead.`;
 }
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });

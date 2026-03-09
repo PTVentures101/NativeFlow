@@ -52,7 +52,9 @@ QUALITY BAR:
 - explanation ✗: "While the phrase is grammatically correct, it may sound slightly unnatural."
 - deepDive bullet ✓: "Pronunciation: Final -s is aspirated or dropped — 'cervezas' sounds like 'cerveza(h)' in Málaga."
 - deepDive bullet ✗: "Spanish speakers in southern Spain sometimes drop certain consonants in casual speech."
-- correction: reflect genuine local speech — slang, shortened forms, contractions, preferred local lexis.`;
+- correction: reflect genuine local speech — slang, shortened forms, contractions, preferred local lexis.
+
+STYLE: Write like a sharp human editor, not an AI. Avoid em dashes (—). Use commas, colons, or short sentences instead. No filler transitions.`;
 }
 
 export const SYSTEM_PROMPT = buildSystemPrompt();
