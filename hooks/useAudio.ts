@@ -84,11 +84,21 @@ async function playViaElevenLabs(
   onEnd: () => void
 ): Promise<boolean> {
   try {
-    const res = await fetch("/api/audio", {
+    // Create AudioContext synchronously — must happen within the user gesture call
+    // stack before any await, otherwise iOS Safari blocks playback entirely.
+    if (!audioCtx || audioCtx.state === "closed") {
+      audioCtx = new AudioContext();
+    }
+
+    // Kick off resume + fetch in parallel — context is already unlocked above.
+    const resumePromise = audioCtx.state === "suspended" ? audioCtx.resume() : Promise.resolve();
+    const fetchPromise = fetch("/api/audio", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, language, region }),
     });
+
+    const [, res] = await Promise.all([resumePromise, fetchPromise]);
 
     if (!res.ok) {
       console.warn("[audio] ElevenLabs returned", res.status, "— falling back to Web Speech");
@@ -96,15 +106,6 @@ async function playViaElevenLabs(
     }
 
     const buffer = await res.arrayBuffer();
-
-    // Create/resume AudioContext (must be inside user gesture call stack)
-    if (!audioCtx || audioCtx.state === "closed") {
-      audioCtx = new AudioContext();
-    }
-    if (audioCtx.state === "suspended") {
-      await audioCtx.resume();
-    }
-
     const decoded = await audioCtx.decodeAudioData(buffer.slice(0));
     const source = audioCtx.createBufferSource();
     source.buffer = decoded;

@@ -15,11 +15,11 @@ if (!process.env.ANTHROPIC_API_KEY) {
   console.warn("[NativeFlow] ANTHROPIC_API_KEY is not set — analysis will fail.");
 }
 
-export async function analyzePhrase(query: string, sourceLang = "English"): Promise<AnalysisResult> {
+export async function analyzePhrase(query: string, sourceLang = "English", location = ""): Promise<AnalysisResult> {
   const message = await anthropic.messages.create({
     model: CLAUDE_MODEL,
     max_tokens: 1024,
-    system: buildSystemPrompt(sourceLang),
+    system: buildSystemPrompt(sourceLang, location),
     messages: [{ role: "user", content: query }],
   });
 

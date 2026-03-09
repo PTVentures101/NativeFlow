@@ -59,10 +59,7 @@ export async function POST(request: NextRequest) {
 
   // ── Analyse ────────────────────────────────────────────────────────────────
   try {
-    const augmentedQuery = location
-      ? `${query}\n\n[User-specified location context: ${location}]`
-      : query;
-    const result = await analyzePhrase(augmentedQuery, sourceLang);
+    const result = await analyzePhrase(query, sourceLang, location);
     return NextResponse.json(result, { headers: rateLimitHeaders });
   } catch (error) {
     console.error("[/api/analyze] Error:", error);
