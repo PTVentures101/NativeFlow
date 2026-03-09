@@ -7,6 +7,7 @@ export interface AnalysisResult {
   detectedLanguage: string;
   detectedRegion: string;
   correction: string;
+  gloss?: string;
   explanation: string;
   deepDive: string[];
 }

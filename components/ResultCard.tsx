@@ -12,12 +12,13 @@ export interface AnalysisResult {
   detectedLanguage: string;
   detectedRegion: string;
   correction: string;
+  gloss?: string;
   explanation: string;
   deepDive: string[];
 }
 
 export function ResultCard({ result, originalQuery, sourceLang = "English" }: { result: AnalysisResult; originalQuery: string; sourceLang?: string }) {
-  const { queryType = "check", isNatural, detectedLanguage, detectedRegion, correction, explanation, deepDive } = result;
+  const { queryType = "check", isNatural, detectedLanguage, detectedRegion, correction, gloss, explanation, deepDive } = result;
   const isTranslate = queryType === "translate";
 
   const { play, stop, isPlaying } = useAudio();
@@ -103,6 +104,9 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
             <p className="text-2xl font-semibold text-indigo-500 dark:text-indigo-400 leading-snug">
               &ldquo;{correction}&rdquo;
             </p>
+            {gloss && (
+              <p className="text-sm text-[#86868b] mt-1">{gloss}</p>
+            )}
           </div>
 
           {/* Audio + Save buttons */}
@@ -124,8 +128,8 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
               size="md"
               payload={{
                 phrase: correction,
-                gloss: explanation,
-                note: "",
+                gloss: gloss || originalQuery,
+                note: explanation,
                 detectedLanguage,
                 detectedRegion,
                 sourceQuery: originalQuery,

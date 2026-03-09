@@ -1,6 +1,6 @@
 export function buildSystemPrompt(sourceLang = "English", location = ""): string {
   const langInstruction = sourceLang !== "English"
-    ? `\nOUTPUT LANGUAGE: Write the "explanation" field and all "deepDive" bullet strings in ${sourceLang}. The "correction" field must always remain in the target language being analysed. "detectedLanguage" and "detectedRegion" must always be written in English.\n`
+    ? `\nOUTPUT LANGUAGE: Write the "gloss", "explanation" fields and all "deepDive" bullet strings in ${sourceLang}. The "correction" field must always remain in the target language being analysed. "detectedLanguage" and "detectedRegion" must always be written in English.\n`
     : "";
 
   const locationInstruction = location
@@ -32,6 +32,7 @@ RESPOND ONLY with a single valid JSON object. No markdown fences. No explanation
   "detectedLanguage": string,
   "detectedRegion": string,
   "correction": string,
+  "gloss": string,
   "explanation": string,
   "deepDive": string[]
 }
@@ -42,6 +43,7 @@ FIELD RULES:
 - detectedLanguage: full language name (e.g. "Spanish", "French", "Mandarin Chinese", "Brazilian Portuguese")
 - detectedRegion: city + region if possible (e.g. "Málaga, Andalusia" · "Montréal, Québec" · "Chengdu, Sichuan"). If TARGET LOCATION is set, derive detectedRegion from it. Otherwise infer from context or use the most representative region for the language.
 - correction: the most authentic local version preserving the same meaning and register. If "check" and already natural, return the original or offer a hyper-local upgrade. If "translate", return the best native phrase for the request.
+- gloss: A concise translation of the "correction" phrase in the user's source language, 3–8 words. Plain meaning only — no verdict, no commentary. Example: "two draft beers, please"
 - explanation: ONE punchy sentence, max 15 words. Blunt verdict — no filler phrases like "it is worth noting".
 - deepDive: a JSON array of exactly 5 bullet strings, one per category, in this exact order: Tone, Vocab, Pronunciation, Native Touch, Etymology. No bullet longer than 25 words. Lead each with the exact keyword followed by the insight.
   - Tone: register/formality — is it too stiff, too casual, wrong social context?
