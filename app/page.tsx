@@ -128,16 +128,15 @@ export default function Home() {
           <a href="/privacy" className="hover:text-indigo-500 transition-colors">Privacy</a>
           <span className="text-[#86868b]/30">·</span>
           <a href="/contact" className="hover:text-indigo-500 transition-colors">Contact</a>
-          <span className="text-[#86868b]/30">·</span>
-          <a href="/pricing" className="hover:text-indigo-500 transition-colors font-medium">Upgrade to Pro</a>
         </div>
       </main>
 
       {/* ── Footer ────────────────────────────────────────── */}
       <footer className="fixed bottom-0 left-0 right-0 hidden sm:block border-t border-black/[0.06] dark:border-white/[0.06] bg-[#faf8f5]/80 dark:bg-[#09090b]/80 backdrop-blur-xl">
-        <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-between">
-          <span className="text-[11px] text-[#86868b]">Free · 10 checks / day</span>
-          <span className="text-[11px] text-[#86868b]">Claude Haiku</span>
+        <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-center gap-3">
+          <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors">Free · 10 checks / day</a>
+          <span className="text-[#86868b]/30">·</span>
+          <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors font-medium">Upgrade to Pro</a>
         </div>
       </footer>
     </div>
