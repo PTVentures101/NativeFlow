@@ -32,13 +32,15 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
 
   return (
     <div className="animate-fade-up rounded-2xl border border-black/[0.07] dark:border-white/[0.07] bg-white dark:bg-white/[0.03] overflow-hidden shadow-lg shadow-black/5 dark:shadow-none">
+      {/* Coloured top accent stripe */}
+      <div className={`h-[3px] ${isTranslate ? "bg-gradient-to-r from-indigo-500 to-violet-400" : isNatural ? "bg-gradient-to-r from-emerald-400 to-teal-400" : "bg-gradient-to-r from-rose-400 to-pink-400"}`} />
 
       {/* ── Verdict row (check queries only) ────────────────── */}
       {!isTranslate && (
         <div className={`px-5 py-3.5 flex items-center justify-between border-b ${
           isNatural
-            ? "border-emerald-500/10 bg-emerald-500/[0.04] dark:bg-emerald-500/[0.06]"
-            : "border-rose-500/10 bg-rose-500/[0.04] dark:bg-rose-500/[0.06]"
+            ? "border-emerald-500/20 bg-emerald-500/[0.08] dark:bg-emerald-500/[0.10]"
+            : "border-rose-500/20 bg-rose-500/[0.08] dark:bg-rose-500/[0.10]"
         }`}>
           <div className="flex items-center gap-2.5">
             <span className={`flex items-center justify-center w-5 h-5 rounded-full ${
@@ -67,7 +69,7 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
 
       {/* ── Translate header (translate queries only) ────────── */}
       {isTranslate && (
-        <div className="px-5 py-3.5 flex items-center justify-between border-b border-indigo-500/10 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.06]">
+        <div className="px-5 py-3.5 flex items-center justify-between border-b border-indigo-500/20 bg-indigo-500/[0.08] dark:bg-indigo-500/[0.10]">
           <div className="flex items-center gap-2.5">
             <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-500/15 text-indigo-500">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

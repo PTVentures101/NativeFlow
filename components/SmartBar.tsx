@@ -95,7 +95,7 @@ export function SmartBar({ value, onChange, onSubmit, isLoading }: SmartBarProps
               flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold
               transition-all duration-150 select-none
               ${canSubmit
-                ? "bg-indigo-500 hover:bg-indigo-400 text-white shadow-sm active:scale-95"
+                ? "bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-400 hover:to-violet-400 text-white shadow-sm active:scale-95"
                 : "bg-black/5 dark:bg-white/5 text-[#86868b] cursor-not-allowed"
               }
             `}

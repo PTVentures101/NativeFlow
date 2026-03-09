@@ -18,6 +18,8 @@ const EXAMPLES = [
   'Is "fare una passeggiata stasera?" natural in Naples?',
 ];
 
+const EXAMPLE_CHIP = "border-black/[0.10] bg-black/[0.03] dark:border-white/[0.10] dark:bg-white/[0.03] text-[#6c6c70] dark:text-[#86868b] hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400/30 hover:bg-indigo-500/[0.04]";
+
 export default function Home() {
   const { sourceLang } = useSourceLanguageContext();
   const [query, setQuery] = useState("");
@@ -54,6 +56,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#09090b] relative">
+      {/* ── Background glow ─────────────────────────────── */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-indigo-500/[0.08] dark:bg-indigo-500/[0.13] rounded-full blur-3xl" />
+      </div>
+
       <Header />
 
       <main className="max-w-2xl mx-auto px-5 pt-28 pb-32 relative z-10">
@@ -63,7 +70,7 @@ export default function Home() {
           <h1 className="text-[2.5rem] sm:text-5xl font-bold tracking-[-0.03em] leading-[1.1] text-[#1d1d1f] dark:text-[#f5f5f7] mb-3">
             Sound like a Native,
             <br />
-            <span className="text-indigo-500">every time.</span>
+            <span className="bg-gradient-to-r from-indigo-500 to-violet-400 bg-clip-text text-transparent">every time.</span>
           </h1>
           <p className="text-sm text-[#6c6c70] dark:text-[#6c6c70] max-w-sm mx-auto leading-relaxed font-light">
             Any phrase, any language. Real-time verdict with regional nuance.
@@ -83,14 +90,14 @@ export default function Home() {
             <p className="text-[10px] uppercase tracking-widest text-[#86868b] mb-3 font-semibold">
               Try an example
             </p>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               {EXAMPLES.map((ex) => (
                 <button
                   key={ex}
                   onClick={() => { setQuery(ex); setAppState("idle"); }}
-                  className="text-left text-xs text-[#6c6c70] hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors leading-relaxed py-0.5"
+                  className={`text-left text-xs font-medium px-3 py-1.5 rounded-full border transition-colors leading-relaxed ${EXAMPLE_CHIP}`}
                 >
-                  ›&nbsp;&nbsp;{ex}
+                  {ex}
                 </button>
               ))}
             </div>
