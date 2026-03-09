@@ -56,7 +56,7 @@ export default function PrivacyPage() {
             What we don&apos;t collect
           </p>
           <p className="text-sm text-[#3d3d3f] dark:text-[#aeaeb2] leading-relaxed">
-            No tracking pixels. No behavioural analytics. No advertising cookies. No selling or sharing of your data with third parties for marketing purposes. We don't build profiles on free users.
+            No tracking pixels. No behavioural analytics. No advertising cookies. No selling or sharing of your data with third parties for marketing purposes. We don&apos;t build profiles on free users.
           </p>
         </section>
 
