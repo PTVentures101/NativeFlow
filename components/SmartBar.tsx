@@ -51,7 +51,7 @@ export function SmartBar({ value, onChange, onSubmit, isLoading }: SmartBarProps
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={isLoading}
-        placeholder={`How do locals say it?\nType a phrase in any language, or ask how to say something...`}
+        placeholder={`How do natives say it?\nType a phrase in any language, or ask how to say something...`}
         rows={2}
         maxLength={600}
         spellCheck={false}

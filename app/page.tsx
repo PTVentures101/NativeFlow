@@ -66,7 +66,7 @@ export default function Home() {
             <span className="text-indigo-500">every time.</span>
           </h1>
           <p className="text-sm text-[#6c6c70] dark:text-[#6c6c70] max-w-sm mx-auto leading-relaxed font-light">
-            Any phrase. Any language. Real-time verdict with the regional nuance textbooks miss.
+            Any phrase, any language. Real-time verdict with regional nuance.
           </p>
         </div>
 
