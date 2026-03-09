@@ -22,7 +22,7 @@ export function LocationBar({ value, onChange }: LocationBarProps) {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Location context — e.g. Madrid, Spain or Tokyo"
+        placeholder="Native location — e.g. Madrid, Barcelona, Tokyo"
         maxLength={80}
         spellCheck={false}
         className="

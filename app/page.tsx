@@ -56,7 +56,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#09090b] relative">
       <Header />
 
-      <main className="max-w-2xl mx-auto px-5 pt-28 pb-24 relative z-10">
+      <main className="max-w-2xl mx-auto px-5 pt-28 pb-32 relative z-10">
 
         {/* ── Hero ──────────────────────────────────────────── */}
         <div className="mb-9 text-center">
