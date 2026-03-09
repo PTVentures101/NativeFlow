@@ -22,6 +22,11 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
 
   const { play, stop, isPlaying } = useAudio();
 
+  const locationLabel = (() => {
+    const city = detectedRegion?.split(",")[0].trim();
+    return city ? `${detectedLanguage} · ${city}` : detectedLanguage;
+  })();
+
   const handleAudio = () => {
     if (isPlaying) {
       stop();
@@ -61,8 +66,7 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
             </span>
           </div>
           <div className="text-right">
-            <p className="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">{detectedRegion}</p>
-            <p className="text-[10px] text-[#86868b] mt-0.5">{detectedLanguage}</p>
+            <p className="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">{locationLabel}</p>
           </div>
         </div>
       )}
@@ -82,8 +86,7 @@ export function ResultCard({ result, originalQuery, sourceLang = "English" }: { 
             </span>
           </div>
           <div className="text-right">
-            <p className="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">{detectedRegion}</p>
-            <p className="text-[10px] text-[#86868b] mt-0.5">{detectedLanguage}</p>
+            <p className="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">{locationLabel}</p>
           </div>
         </div>
       )}
