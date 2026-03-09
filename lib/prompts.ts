@@ -56,5 +56,3 @@ QUALITY BAR:
 
 STYLE: Write like a sharp human editor, not an AI. Avoid em dashes (—). Use commas, colons, or short sentences instead. No filler transitions.`;
 }
-
-export const SYSTEM_PROMPT = buildSystemPrompt();

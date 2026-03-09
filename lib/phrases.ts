@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { anthropic, CLAUDE_MODEL, stripJsonFences } from "./anthropic";
 
 export interface PhraseSuggestion {
   phrase: string;
@@ -45,8 +45,6 @@ QUALITY BAR:
 STYLE: Avoid em dashes (—). Use commas or short sentences instead.`;
 }
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 export async function getSituationalPhrases(
   originalQuery: string,
   detectedLanguage: string,
@@ -66,20 +64,22 @@ Do NOT include the "Authentic local correction" phrase itself as one of the sugg
 Provide situational phrases for this scenario.`;
 
   const message = await anthropic.messages.create({
-    model: "claude-haiku-4-5-20251001",
+    model: CLAUDE_MODEL,
     max_tokens: 1024,
     system: buildPhrasesSystemPrompt(sourceLang),
     messages: [{ role: "user", content: prompt }],
   });
 
   const text = message.content[0].type === "text" ? message.content[0].text.trim() : "";
-  const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+  const cleaned = stripJsonFences(text);
 
-  const parsed = JSON.parse(cleaned) as PhrasesResult;
-
-  if (!parsed.situation || !Array.isArray(parsed.phrases) || parsed.phrases.length === 0) {
-    throw new Error("Invalid phrases response from model");
+  try {
+    const parsed = JSON.parse(cleaned) as PhrasesResult;
+    if (!parsed.situation || !Array.isArray(parsed.phrases) || parsed.phrases.length === 0) {
+      throw new Error("Invalid phrases response from model");
+    }
+    return parsed;
+  } catch {
+    throw new Error(`Failed to parse phrases response: ${text.slice(0, 200)}`);
   }
-
-  return parsed;
 }

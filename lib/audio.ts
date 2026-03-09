@@ -34,16 +34,12 @@ function getLanguageCode(language: string): string {
 // Server-side in-memory cache: voiceId::langCode::text → ArrayBuffer
 const cache = new Map<string, ArrayBuffer>();
 
-export function getVoiceForRegion(_language: string): string {
-  return DEFAULT_VOICE_ID;
-}
-
 export async function synthesizeSpeech(options: TTSOptions): Promise<ArrayBuffer> {
   if (!process.env.ELEVENLABS_API_KEY) {
     throw new Error("ELEVENLABS_API_KEY is not configured.");
   }
 
-  const voiceId = getVoiceForRegion(options.detectedLanguage);
+  const voiceId = DEFAULT_VOICE_ID;
   const langCode = getLanguageCode(options.detectedLanguage);
   const cacheKey = `${voiceId}::${langCode}::${options.text}`;
 

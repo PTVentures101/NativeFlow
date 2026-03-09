@@ -57,5 +57,5 @@ export function useSpeechInput({ onResult }: UseSpeechInputOptions) {
     }
   }, [isListening, startListening, stopListening]);
 
-  return { isListening, isSupported, toggle };
+  return { isListening, toggle };
 }
