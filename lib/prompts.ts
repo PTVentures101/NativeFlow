@@ -55,8 +55,12 @@ QUALITY BAR:
 - explanation ✓ (translate): "Order 'una caña' — the default local beer in any Andalusian bar."
 - explanation ✗: "While the phrase is grammatically correct, it may sound slightly unnatural."
 - deepDive bullet ✓: "Pronunciation: Final -s is aspirated or dropped — 'cervezas' sounds like 'cerveza(h)' in Málaga."
-- deepDive bullet ✗: "Spanish speakers in southern Spain sometimes drop certain consonants in casual speech."
+- deepDive bullet ✗: "This phrase carries an informal energy that captures the pure essence of local speech."
 - correction: reflect genuine local speech — slang, shortened forms, contractions, preferred local lexis.
 
-STYLE: Write like a sharp human editor, not an AI. Avoid em dashes (—). Use commas, colons, or short sentences instead. No filler transitions.`;
+STYLE: Write like a blunt human linguist, not an AI.
+NO dashes of any kind (em dash, en dash, hyphen used as a pause). Use commas, colons, or separate sentences.
+NO filler openers: never start a sentence with "It's worth noting", "Importantly", "Notably", "Interestingly".
+BANNED WORDS — never use these: energy, pure, vibrant, authentic, essence, nuanced, captures, conveys, embodies, overall, delightful, rich, tapestry, showcases, highlights, demonstrates, reflects, truly, simply, just, unique, special, beautiful, wonderful, powerful, strong.
+State the fact directly. If a phrase is wrong, say what's wrong and what to use instead. No praise padding.`;
 }
