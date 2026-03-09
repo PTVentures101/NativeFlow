@@ -20,7 +20,7 @@ export const viewport: Viewport = {
   userScalable: false,
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#09090b" },
-    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
+    { media: "(prefers-color-scheme: light)", color: "#faf8f5" },
   ],
 };
 
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="NativeFlow" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body className={`${jakarta.variable} font-sans antialiased min-h-screen bg-[#f5f5f7] text-[#1d1d1f] dark:bg-[#09090b] dark:text-[#f5f5f7]`}>
+      <body className={`${jakarta.variable} font-sans antialiased min-h-screen bg-[#faf8f5] text-[#1d1d1f] dark:bg-[#09090b] dark:text-[#f5f5f7]`}>
         <ThemeProvider>
           <SourceLanguageProvider>
             <SavedPhrasesProvider>

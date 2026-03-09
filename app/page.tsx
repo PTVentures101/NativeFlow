@@ -53,7 +53,7 @@ export default function Home() {
   const reset = () => { setQuery(""); setAppState("idle"); setResult(null); setErrorMessage(""); setLocation(""); setSubmittedQuery(""); };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] dark:bg-[#09090b] relative">
+    <div className="min-h-screen bg-[#faf8f5] dark:bg-[#09090b] relative">
       <Header />
 
       <main className="max-w-2xl mx-auto px-5 pt-28 pb-24 relative z-10">
@@ -119,10 +119,22 @@ export default function Home() {
             </button>
           </div>
         )}
+        {/* ── Site footer ───────────────────────────────────── */}
+        <div className="mt-16 pb-14 text-center text-[11px] text-[#86868b] flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <span>© 2026 PolyGot</span>
+          <span className="text-[#86868b]/30">·</span>
+          <a href="/about" className="hover:text-indigo-500 transition-colors">About</a>
+          <span className="text-[#86868b]/30">·</span>
+          <a href="/privacy" className="hover:text-indigo-500 transition-colors">Privacy</a>
+          <span className="text-[#86868b]/30">·</span>
+          <a href="/contact" className="hover:text-indigo-500 transition-colors">Contact</a>
+          <span className="text-[#86868b]/30">·</span>
+          <a href="/pricing" className="hover:text-indigo-500 transition-colors font-medium">Upgrade to Pro</a>
+        </div>
       </main>
 
       {/* ── Footer ────────────────────────────────────────── */}
-      <footer className="fixed bottom-0 left-0 right-0 hidden sm:block border-t border-black/[0.06] dark:border-white/[0.06] bg-[#f5f5f7]/80 dark:bg-[#09090b]/80 backdrop-blur-xl">
+      <footer className="fixed bottom-0 left-0 right-0 hidden sm:block border-t border-black/[0.06] dark:border-white/[0.06] bg-[#faf8f5]/80 dark:bg-[#09090b]/80 backdrop-blur-xl">
         <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-between">
           <span className="text-[11px] text-[#86868b]">Free · 10 checks / day</span>
           <span className="text-[11px] text-[#86868b]">Claude Haiku</span>

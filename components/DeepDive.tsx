@@ -26,7 +26,7 @@ export function DeepDive({ bullets, detectedRegion, detectedLanguage }: DeepDive
         className="w-full flex items-center gap-3 py-3 group"
       >
         <div className="flex-1 h-px bg-black/8 dark:bg-white/8 group-hover:bg-indigo-400/40 transition-colors" />
-        <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#86868b] group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors whitespace-nowrap select-none">
+        <span className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-widest text-[#86868b] group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors whitespace-nowrap select-none">
           Deep Dive
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
             className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}>

@@ -90,7 +90,10 @@ async function playViaElevenLabs(
       body: JSON.stringify({ text, language, region }),
     });
 
-    if (!res.ok) return false; // 503 = no key configured, fall through to Web Speech
+    if (!res.ok) {
+      console.warn("[audio] ElevenLabs returned", res.status, "— falling back to Web Speech");
+      return false;
+    }
 
     const buffer = await res.arrayBuffer();
 
@@ -113,7 +116,8 @@ async function playViaElevenLabs(
     onStart();
     source.start();
     return true;
-  } catch {
+  } catch (err) {
+    console.warn("[audio] ElevenLabs failed:", err);
     return false;
   }
 }

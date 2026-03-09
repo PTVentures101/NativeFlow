@@ -85,7 +85,7 @@ export function PhrasesPanel({ originalQuery, correction, detectedLanguage, dete
         className="w-full flex items-center gap-3 py-3 group"
       >
         <div className="flex-1 h-px bg-black/8 dark:bg-white/8 group-hover:bg-indigo-400/40 transition-colors" />
-        <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#86868b] group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors whitespace-nowrap select-none">
+        <span className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-widest text-[#86868b] group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors whitespace-nowrap select-none">
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
@@ -144,10 +144,10 @@ export function PhrasesPanel({ originalQuery, correction, detectedLanguage, dete
                 {result.phrases.map((p, i) => (
                   <li key={i} className="flex items-center gap-3 rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.02] px-3.5 py-3">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] leading-snug">
+                      <p className="text-[15px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] leading-snug">
                         {p.phrase}
                       </p>
-                      <p className="text-[11px] text-[#86868b] mt-0.5 leading-snug">
+                      <p className="text-xs text-[#86868b] mt-0.5 leading-snug">
                         {p.gloss}
                         {p.note && (
                           <span className="text-[#86868b]/70"> · {p.note}</span>
