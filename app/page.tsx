@@ -161,7 +161,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-center gap-3">
           <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors">Free · 10 checks / day</a>
           <span className="text-[#86868b]/30">·</span>
-          <a href="/pricing" className="text-[11px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-semibold">Upgrade to Pro</a>
+          <a href="/pricing" className="text-[11px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-semibold">Upgrade to Premium</a>
         </div>
       </footer>
     </div>
