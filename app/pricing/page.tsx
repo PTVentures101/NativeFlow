@@ -23,40 +23,40 @@ const TIERS = [
     ],
   },
   {
-    name: "Plus",
-    monthlyPrice: 7,
-    annualPrice: 56,
-    description: "For regular learners who want more.",
-    color: "border-indigo-500/40",
-    badge: null,
-    cta: "Coming soon",
-    ctaHref: "#",
-    ctaStyle: "bg-indigo-500 text-white opacity-50 cursor-not-allowed",
-    features: [
-      { label: "50 checks per day", included: true },
-      { label: "6 situational phrases per result", included: true },
-      { label: "Natural voice audio", included: true },
-      { label: "Flashcard drilling", included: false },
-      { label: "Explain in your language", included: false },
-    ],
-  },
-  {
-    name: "Pro",
-    monthlyPrice: 16,
-    annualPrice: 128,
-    description: "For serious polyglots.",
+    name: "Premium",
+    monthlyPrice: 14,
+    annualPrice: 112,
+    description: "For serious language learners.",
     color: "border-amber-500/40",
     badge: "Most popular",
     cta: "Coming soon",
     ctaHref: "#",
     ctaStyle: "bg-amber-500 text-white opacity-50 cursor-not-allowed",
     features: [
-      { label: "500 checks per day", included: true },
+      { label: "Unlimited checks", included: true },
       { label: "10 situational phrases per result", included: true },
       { label: "Natural voice audio", included: true },
       { label: "Flashcard drilling", included: true },
       { label: "Explain in your language", included: true },
     ],
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote: "I've been studying Spanish for three years. NativeFlow told me more about how people in Málaga actually speak than my entire course did.",
+    name: "James T.",
+    context: "Learning Spanish",
+  },
+  {
+    quote: "I was using textbook French in Paris and wondering why people looked confused. This app showed me exactly what I was getting wrong.",
+    name: "Sarah K.",
+    context: "Learning French",
+  },
+  {
+    quote: "The regional detail is what makes it. 'Natural in Tokyo' is a completely different verdict to 'natural in Osaka'.",
+    name: "Mihail R.",
+    context: "Learning Japanese",
   },
 ];
 
@@ -114,8 +114,27 @@ export default function PricingPage() {
           </span>
         </div>
 
+        {/* Testimonials */}
+        <div className="mb-10">
+          <p className="text-[10px] uppercase tracking-widest font-semibold text-[#86868b] mb-4 text-center">
+            What people say
+          </p>
+          <div className="flex flex-col gap-3">
+            {TESTIMONIALS.map((t) => (
+              <div key={t.name} className="rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.03] px-5 py-4">
+                <p className="text-sm text-[#3d3d3f] dark:text-[#aeaeb2] leading-relaxed mb-3">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <p className="text-[11px] font-medium text-[#86868b]">
+                  {t.name} &middot; <span className="font-normal">{t.context}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Tier cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto w-full">
           {TIERS.map((tier) => {
             const price = annual ? tier.annualPrice : tier.monthlyPrice;
             const perMonth = annual && tier.annualPrice > 0
