@@ -67,7 +67,7 @@ export function SmartBar({ value, onChange, onSubmit, isLoading }: SmartBarProps
 
       <div className="flex items-center justify-between px-3 pb-3 pt-1 gap-2">
         <span className="text-[11px] text-[#86868b] select-none pl-1">
-          {value.length > 0 ? `${value.length} / 600` : "↵ Enter to check · Shift+Enter for new line"}
+          {value.length > 0 ? `${value.length} / 600` : ""}
         </span>
 
         <div className="flex items-center gap-2">
