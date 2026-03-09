@@ -150,6 +150,8 @@ export default function Home() {
           <span className="text-[#86868b]/30">·</span>
           <a href="/privacy" className="hover:text-indigo-500 transition-colors">Privacy</a>
           <span className="text-[#86868b]/30">·</span>
+          <a href="/terms" className="hover:text-indigo-500 transition-colors">Terms</a>
+          <span className="text-[#86868b]/30">·</span>
           <a href="/contact" className="hover:text-indigo-500 transition-colors">Contact</a>
         </div>
       </main>
