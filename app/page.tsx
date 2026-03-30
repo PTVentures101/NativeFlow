@@ -157,7 +157,7 @@ export default function Home() {
 
           {appState === "idle" && (
             <div className="mb-8">
-              <p className="text-[10px] uppercase tracking-widest text-[#86868b] mb-3 font-semibold">
+              <p className="text-[10px] uppercase tracking-widest text-indigo-500 dark:text-indigo-400 mb-3 font-semibold">
                 Try an example
               </p>
               <div className="flex flex-col gap-2">
