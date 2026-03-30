@@ -115,7 +115,7 @@ export function QueryInput({
               flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold
               transition-all duration-150 select-none
               ${canSubmit
-                ? "bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-white shadow-sm active:scale-95"
+                ? "bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white shadow-sm shadow-amber-500/20 active:scale-95"
                 : "bg-black/5 dark:bg-white/5 text-[#86868b] cursor-not-allowed"
               }
             `}
