@@ -18,11 +18,23 @@ function AccountContent() {
   const { isLoaded, isSignedIn, isPro, email } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id");
   const upgraded = searchParams.get("upgraded") === "true";
 
   const [usageToday, setUsageToday] = useState(0);
   const [portalLoading, setPortalLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  useEffect(() => {
+    if (!sessionId || !isLoaded || !isSignedIn) return;
+    fetch("/api/stripe/confirm-upgrade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId }),
+    })
+      .then(() => window.location.replace("/account?upgraded=true"))
+      .catch(console.error);
+  }, [sessionId, isLoaded, isSignedIn]);
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
