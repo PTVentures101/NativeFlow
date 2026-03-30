@@ -4,9 +4,10 @@ import { useState, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { SmartBar } from "@/components/SmartBar";
 import { LocationBar } from "@/components/LocationBar";
-import { SourceLanguagePicker } from "@/components/SourceLanguagePicker";
 import { ResultCard, type AnalysisResult } from "@/components/ResultCard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
+import { TabBar } from "@/components/TabBar";
+import { GetPhrasesTab } from "@/components/GetPhrasesTab";
 import { useSourceLanguageContext } from "@/contexts/SourceLanguageContext";
 
 type AppState = "idle" | "loading" | "result" | "error";
@@ -38,6 +39,7 @@ const EXAMPLE_CHIP = "border-black/[0.10] bg-black/[0.03] dark:border-white/[0.1
 
 export default function Home() {
   const { sourceLang } = useSourceLanguageContext();
+  const [activeTab, setActiveTab] = useState<"check" | "phrases">("check");
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
@@ -93,55 +95,68 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ── Location + Smart Bar ──────────────────────────── */}
-        <div className="mb-4 flex flex-col gap-2">
+        {/* ── Location bar (shared between tabs) ────────────── */}
+        <div className="mb-4">
           <LocationBar value={location} onChange={setLocation} />
-          <SourceLanguagePicker />
-          <SmartBar value={query} onChange={setQuery} onSubmit={handleSubmit} isLoading={appState === "loading"} />
         </div>
 
-        {/* ── Examples ──────────────────────────────────────── */}
-        {appState === "idle" && (
-          <div className="mb-8">
-            <p className="text-[10px] uppercase tracking-widest text-[#86868b] mb-3 font-semibold">
-              Try an example
-            </p>
-            <div className="flex flex-col gap-2">
-              {EXAMPLES.map((ex) => (
-                <button
-                  key={ex.label}
-                  onClick={() => { setQuery(ex.query); setLocation(ex.location); setAppState("idle"); }}
-                  className={`text-left text-xs font-medium px-3 py-1.5 rounded-full border transition-colors leading-relaxed ${EXAMPLE_CHIP}`}
-                >
-                  {ex.label}
-                </button>
-              ))}
-            </div>
+        {/* ── Tab switcher ──────────────────────────────────── */}
+        <TabBar active={activeTab} onChange={setActiveTab} />
+
+        {/* ── Check a Phrase tab ────────────────────────────── */}
+        <div className={activeTab === "check" ? "" : "hidden"}>
+          <div className="mb-4">
+            <SmartBar value={query} onChange={setQuery} onSubmit={handleSubmit} isLoading={appState === "loading"} />
           </div>
-        )}
 
-        {/* ── States ────────────────────────────────────────── */}
-        {appState === "loading" && <LoadingSkeleton />}
+          {appState === "idle" && (
+            <div className="mb-8">
+              <p className="text-[10px] uppercase tracking-widest text-[#86868b] mb-3 font-semibold">
+                Try an example
+              </p>
+              <div className="flex flex-col gap-2">
+                {EXAMPLES.map((ex) => (
+                  <button
+                    key={ex.label}
+                    onClick={() => { setQuery(ex.query); setLocation(ex.location); setAppState("idle"); }}
+                    className={`text-left text-xs font-medium px-3 py-1.5 rounded-full border transition-colors leading-relaxed ${EXAMPLE_CHIP}`}
+                  >
+                    {ex.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {appState === "result" && result && (
-          <>
-            <ResultCard result={result} originalQuery={submittedQuery} sourceLang={sourceLang} />
-            <div className="mt-5 flex justify-center">
-              <button onClick={reset} className="text-xs text-[#86868b] hover:text-indigo-500 transition-colors">
-                ← Check another phrase
+          {appState === "loading" && <LoadingSkeleton />}
+
+          {appState === "result" && result && (
+            <>
+              <ResultCard result={result} originalQuery={submittedQuery} sourceLang={sourceLang} />
+              <div className="mt-5 flex justify-center">
+                <button onClick={reset} className="text-xs text-[#86868b] hover:text-indigo-500 transition-colors">
+                  ← Check another phrase
+                </button>
+              </div>
+            </>
+          )}
+
+          {appState === "error" && (
+            <div className="rounded-2xl border border-rose-500/15 bg-rose-500/[0.04] dark:bg-rose-500/[0.06] px-5 py-4">
+              <p className="text-sm text-rose-600 dark:text-rose-400 leading-relaxed">{errorMessage}</p>
+              <button onClick={reset} className="mt-3 text-xs text-[#86868b] hover:text-amber-500 transition-colors">
+                ← Try again
               </button>
             </div>
-          </>
-        )}
+          )}
+        </div>
 
-        {appState === "error" && (
-          <div className="rounded-2xl border border-rose-500/15 bg-rose-500/[0.04] dark:bg-rose-500/[0.06] px-5 py-4">
-            <p className="text-sm text-rose-600 dark:text-rose-400 leading-relaxed">{errorMessage}</p>
-            <button onClick={reset} className="mt-3 text-xs text-[#86868b] hover:text-amber-500 transition-colors">
-              ← Try again
-            </button>
-          </div>
-        )}
+        {/* ── Get Phrases tab ───────────────────────────────── */}
+        {/* Kept mounted at all times so state persists when switching tabs */}
+        <div className={activeTab === "phrases" ? "" : "hidden"}>
+          <GetPhrasesTab location={location} onLocationChange={setLocation} />
+        </div>
+
         {/* ── Site footer ───────────────────────────────────── */}
         <div className="mt-16 pb-14 text-center text-[11px] text-[#86868b] flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
           <span>© 2026 PolyGot</span>
