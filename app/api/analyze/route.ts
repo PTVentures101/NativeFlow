@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { analyzePhrase } from "@/lib/llm";
 import { getIp, rateLimit } from "@/lib/rate-limit";
 import { getUserTier } from "@/lib/tier";
+import { clerkEnabled } from "@/lib/clerk-enabled";
 
 export async function POST(request: NextRequest) {
   // ── Tier check — Pro users bypass rate limiting ────────────────────────────
-  const { userId } = await auth();
-  const tier = await getUserTier(userId ?? null);
-  const isPro = tier === "pro";
+  let isPro = false;
+  if (clerkEnabled) {
+    const { auth } = await import("@clerk/nextjs/server");
+    const { userId } = await auth();
+    const tier = await getUserTier(userId ?? null);
+    isPro = tier === "pro";
+  }
 
   let rateLimitHeaders: Record<string, string> = {};
 

@@ -1,23 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const _key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "";
-const clerkEnabled = _key.startsWith("pk_") && _key.length > 40;
+const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "";
+const clerkEnabled = key.startsWith("pk_") && key.length > 40;
 
-// Lazily load Clerk middleware only when properly configured
-const handler = clerkEnabled
+export default clerkEnabled
   ? (() => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { clerkMiddleware, createRouteMatcher } = require("@clerk/nextjs/server");
       const isProtectedRoute = createRouteMatcher(["/account(.*)"]);
       return clerkMiddleware(async (auth: { protect: () => Promise<void> }, req: NextRequest) => {
-        if (isProtectedRoute(req)) {
-          await auth.protect();
-        }
+        if (isProtectedRoute(req)) await auth.protect();
       });
     })()
-  : (_req: NextRequest) => NextResponse.next();
-
-export default handler;
+  : function middleware(_req: NextRequest) {
+      return NextResponse.next();
+    };
 
 export const config = {
   matcher: [
