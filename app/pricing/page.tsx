@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const TIERS = [
   {
@@ -23,15 +25,15 @@ const TIERS = [
     ],
   },
   {
-    name: "Premium",
-    monthlyPrice: 14,
-    annualPrice: 112,
+    name: "Pro",
+    monthlyPrice: 4.99,
+    annualPrice: 49,
     description: "For serious language learners.",
-    color: "border-amber-500/40",
+    color: "border-indigo-500/40",
     badge: "Most popular",
-    cta: "Coming soon",
+    cta: "Get Pro",
     ctaHref: "#",
-    ctaStyle: "bg-amber-500 text-white opacity-50 cursor-not-allowed",
+    ctaStyle: "bg-indigo-500 hover:bg-indigo-600 text-white",
     features: [
       { label: "Unlimited checks", included: true },
       { label: "10 situational phrases per result", included: true },
@@ -62,6 +64,25 @@ const TESTIMONIALS = [
 
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
+  const router = useRouter();
+
+  async function handleProCta() {
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) router.push(data.url);
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }
 
   return (
     <main className="relative z-10 min-h-screen flex flex-col">
@@ -148,7 +169,7 @@ export default function PricingPage() {
               >
                 {/* Badge */}
                 {tier.badge && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-indigo-500 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full whitespace-nowrap">
                     {tier.badge}
                   </span>
                 )}
@@ -167,13 +188,13 @@ export default function PricingPage() {
                     <div>
                       <div className="flex items-end gap-1">
                         <span className="text-3xl font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">
-                          ${perMonth ?? price}
+                          £{perMonth ?? price}
                         </span>
                         <span className="text-xs text-[#86868b] mb-1.5">/mo</span>
                       </div>
                       {annual && (
                         <p className="text-[11px] text-[#86868b] mt-0.5">
-                          ${price} billed annually
+                          £{price} billed annually
                         </p>
                       )}
                     </div>
@@ -181,12 +202,22 @@ export default function PricingPage() {
                 </div>
 
                 {/* CTA */}
-                <a
-                  href={tier.ctaHref}
-                  className={`block text-center text-xs font-semibold py-2 rounded-lg transition-opacity ${tier.ctaStyle}`}
-                >
-                  {tier.cta}
-                </a>
+                {tier.name === "Pro" ? (
+                  <button
+                    onClick={handleProCta}
+                    disabled={checkoutLoading}
+                    className={`block w-full text-center text-xs font-semibold py-2 rounded-lg transition-colors ${tier.ctaStyle} disabled:opacity-60`}
+                  >
+                    {checkoutLoading ? "Loading…" : tier.cta}
+                  </button>
+                ) : (
+                  <a
+                    href={tier.ctaHref}
+                    className={`block text-center text-xs font-semibold py-2 rounded-lg transition-opacity ${tier.ctaStyle}`}
+                  >
+                    {tier.cta}
+                  </a>
+                )}
 
                 {/* Feature list */}
                 <ul className="flex flex-col gap-2.5">
@@ -215,7 +246,7 @@ export default function PricingPage() {
 
         {/* Footer note */}
         <p className="text-center text-[11px] text-[#86868b] mt-8">
-          Paid plans coming soon. All limits are per account once sign-in is available.
+          Cancel anytime. No questions asked.
         </p>
       </div>
     </main>

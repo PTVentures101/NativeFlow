@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Header } from "@/components/Header";
 import { SmartBar } from "@/components/SmartBar";
 import { LocationBar } from "@/components/LocationBar";
@@ -8,9 +9,34 @@ import { ResultCard, type AnalysisResult } from "@/components/ResultCard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { TabBar } from "@/components/TabBar";
 import { GetPhrasesTab } from "@/components/GetPhrasesTab";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { useSourceLanguageContext } from "@/contexts/SourceLanguageContext";
 
 type AppState = "idle" | "loading" | "result" | "error";
+
+const DAILY_LIMIT = 10;
+
+function getTodayKey() {
+  return `nv_usage_${new Date().toISOString().slice(0, 10)}`;
+}
+
+function getUsageCount(): number {
+  try {
+    return parseInt(localStorage.getItem(getTodayKey()) ?? "0", 10) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function incrementUsage(): number {
+  try {
+    const next = getUsageCount() + 1;
+    localStorage.setItem(getTodayKey(), String(next));
+    return next;
+  } catch {
+    return 0;
+  }
+}
 
 const EXAMPLES: { label: string; query: string; location: string }[] = [
   {
@@ -39,6 +65,9 @@ const EXAMPLE_CHIP = "border-black/[0.10] bg-black/[0.03] dark:border-white/[0.1
 
 export default function Home() {
   const { sourceLang } = useSourceLanguageContext();
+  const { user, isLoaded } = useUser();
+  const isPro = isLoaded && (user?.publicMetadata?.tier as string) === "pro";
+
   const [activeTab, setActiveTab] = useState<"check" | "phrases">("check");
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
@@ -46,6 +75,12 @@ export default function Home() {
   const [appState, setAppState] = useState<AppState>("idle");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [usageCount, setUsageCount] = useState(0);
+
+  // Load usage count from localStorage on mount
+  useEffect(() => {
+    setUsageCount(getUsageCount());
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     const trimmed = query.trim();
@@ -61,16 +96,28 @@ export default function Home() {
         body: JSON.stringify({ query: trimmed, location: location.trim(), sourceLang }),
       });
       const data = await res.json();
-      if (!res.ok) { setErrorMessage(data.error ?? "Something went wrong."); setAppState("error"); return; }
+      if (!res.ok) {
+        setErrorMessage(data.error ?? "Something went wrong.");
+        setAppState("error");
+        if (res.status === 429) setUsageCount(DAILY_LIMIT);
+        return;
+      }
+      if (!isPro) setUsageCount(incrementUsage());
       setResult(data as AnalysisResult);
       setAppState("result");
     } catch {
       setErrorMessage("Network error. Check your connection and try again.");
       setAppState("error");
     }
-  }, [query, location, sourceLang]);
+  }, [query, location, sourceLang, isPro]);
 
-  const reset = () => { setQuery(""); setAppState("idle"); setResult(null); setErrorMessage(""); setLocation(""); setSubmittedQuery(""); };
+  const reset = () => {
+    setQuery("");
+    setAppState("idle");
+    setResult(null);
+    setErrorMessage("");
+    setSubmittedQuery("");
+  };
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#09090b] relative">
@@ -149,12 +196,22 @@ export default function Home() {
               </button>
             </div>
           )}
+
+          {/* Upgrade prompt — shown near/at limit, hidden for Pro */}
+          {!isPro && <UpgradePrompt usageCount={usageCount} dailyLimit={DAILY_LIMIT} />}
         </div>
 
         {/* ── Get Phrases tab ───────────────────────────────── */}
         {/* Kept mounted at all times so state persists when switching tabs */}
         <div className={activeTab === "phrases" ? "" : "hidden"}>
-          <GetPhrasesTab location={location} onLocationChange={setLocation} />
+          <GetPhrasesTab
+            location={location}
+            onLocationChange={setLocation}
+            usageCount={usageCount}
+            dailyLimit={DAILY_LIMIT}
+            isPro={isPro}
+            onUsageIncrement={() => setUsageCount(incrementUsage())}
+          />
         </div>
 
         {/* ── Site footer ───────────────────────────────────── */}
@@ -174,9 +231,15 @@ export default function Home() {
       {/* ── Footer ────────────────────────────────────────── */}
       <footer className="fixed bottom-0 left-0 right-0 hidden sm:block z-20 border-t border-black/[0.06] dark:border-white/[0.06] bg-[#faf8f5] dark:bg-[#09090b]">
         <div className="max-w-2xl mx-auto px-5 h-10 flex items-center justify-center gap-3">
-          <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors">Free · 10 checks / day</a>
-          <span className="text-[#86868b]/30">·</span>
-          <a href="/pricing" className="text-[11px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-semibold">Upgrade to Premium</a>
+          {isPro ? (
+            <a href="/account" className="text-[11px] text-emerald-500 dark:text-emerald-400 font-semibold">Pro · Unlimited</a>
+          ) : (
+            <>
+              <a href="/pricing" className="text-[11px] text-[#86868b] hover:text-indigo-500 transition-colors">Free · 10 checks / day</a>
+              <span className="text-[#86868b]/30">·</span>
+              <a href="/pricing" className="text-[11px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-semibold">Upgrade to Pro</a>
+            </>
+          )}
         </div>
       </footer>
     </div>

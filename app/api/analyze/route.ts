@@ -1,26 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { analyzePhrase } from "@/lib/llm";
 import { getIp, rateLimit } from "@/lib/rate-limit";
+import { getUserTier } from "@/lib/tier";
 
 export async function POST(request: NextRequest) {
-  // ── Rate limiting ──────────────────────────────────────────────────────────
-  const ip = getIp(request);
-  const { success, remaining, limit } = await rateLimit(ip);
+  // ── Tier check — Pro users bypass rate limiting ────────────────────────────
+  const { userId } = await auth();
+  const tier = await getUserTier(userId ?? null);
+  const isPro = tier === "pro";
 
-  const rateLimitHeaders = {
-    "X-RateLimit-Limit": String(limit),
-    "X-RateLimit-Remaining": String(remaining),
-  };
+  let rateLimitHeaders: Record<string, string> = {};
 
-  if (!success) {
-    return NextResponse.json(
-      {
-        error:
-          "You've reached the free daily limit of 10 checks. Upgrade to Plus for unlimited access.",
-        code: "RATE_LIMITED",
-      },
-      { status: 429, headers: rateLimitHeaders }
-    );
+  if (!isPro) {
+    const ip = getIp(request);
+    const { success, remaining, limit } = await rateLimit(ip);
+    rateLimitHeaders = {
+      "X-RateLimit-Limit": String(limit),
+      "X-RateLimit-Remaining": String(remaining),
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          error:
+            "You've reached the free daily limit of 10 checks. Upgrade to Pro for unlimited access.",
+          code: "RATE_LIMITED",
+        },
+        { status: 429, headers: rateLimitHeaders }
+      );
+    }
   }
 
   // ── Parse & validate request ───────────────────────────────────────────────

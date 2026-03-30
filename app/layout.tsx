@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SavedPhrasesProvider } from "@/contexts/SavedPhrasesContext";
 import { SourceLanguageProvider } from "@/contexts/SourceLanguageContext";
@@ -59,14 +60,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${jakarta.variable} font-sans antialiased min-h-screen bg-[#faf8f5] text-[#1d1d1f] dark:bg-[#09090b] dark:text-[#f5f5f7]`}>
-        <ThemeProvider>
-          <SourceLanguageProvider>
-            <SavedPhrasesProvider>
-              {children}
-              <BottomNav />
-            </SavedPhrasesProvider>
-          </SourceLanguageProvider>
-        </ThemeProvider>
+        <ClerkProvider>
+          <ThemeProvider>
+            <SourceLanguageProvider>
+              <SavedPhrasesProvider>
+                {children}
+                <BottomNav />
+              </SavedPhrasesProvider>
+            </SourceLanguageProvider>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
