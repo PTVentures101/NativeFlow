@@ -6,6 +6,7 @@ import { SOURCE_LANGUAGES } from "@/hooks/useSourceLanguage";
 import { useSourceLanguageContext } from "@/contexts/SourceLanguageContext";
 import { GetPhrasesResult } from "./GetPhrasesResult";
 import { QueryInput } from "@/components/QueryInput";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 
 // All languages except English — user wants phrases *in* a foreign language
 const TARGET_LANGUAGES = SOURCE_LANGUAGES.filter((l) => l !== "English");
@@ -22,9 +23,13 @@ type TabState = "idle" | "loading" | "result" | "error";
 interface GetPhrasesTabProps {
   location: string;
   onLocationChange: (location: string) => void;
+  usageCount: number;
+  dailyLimit: number;
+  isPro: boolean;
+  onUsageIncrement: () => void;
 }
 
-export function GetPhrasesTab({ location, onLocationChange }: GetPhrasesTabProps) {
+export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLimit, isPro, onUsageIncrement }: GetPhrasesTabProps) {
   const { sourceLang } = useSourceLanguageContext();
   const [situation, setSituation] = useState("");
   const [targetLanguage, setTargetLanguage] = useState<string>("Spanish");
@@ -58,13 +63,14 @@ export function GetPhrasesTab({ location, onLocationChange }: GetPhrasesTabProps
         setTabState("error");
         return;
       }
+      if (!isPro) onUsageIncrement();
       setPhrases(data.phrases as SituationalPhrase[]);
       setTabState("result");
     } catch {
       setErrorMessage("Network error. Check your connection and try again.");
       setTabState("error");
     }
-  }, [situation, targetLanguage, location, sourceLang, tabState]);
+  }, [situation, targetLanguage, location, sourceLang, tabState, isPro, onUsageIncrement]);
 
   const handleLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -189,6 +195,9 @@ export function GetPhrasesTab({ location, onLocationChange }: GetPhrasesTabProps
           </button>
         </div>
       )}
+
+      {/* Upgrade prompt — shown near/at limit, hidden for Pro */}
+      {!isPro && <UpgradePrompt usageCount={usageCount} dailyLimit={dailyLimit} />}
     </div>
   );
 }

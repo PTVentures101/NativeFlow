@@ -4,6 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SavedPhrasesProvider } from "@/contexts/SavedPhrasesContext";
 import { SourceLanguageProvider } from "@/contexts/SourceLanguageContext";
+import { NoAuthProvider } from "@/contexts/AuthContext";
+import { ClerkAuthProvider } from "@/contexts/ClerkAuthProvider";
 import { BottomNav } from "@/components/BottomNav";
 import "./globals.css";
 
@@ -49,6 +51,35 @@ export const metadata: Metadata = {
   },
 };
 
+const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+// Real Clerk keys are 80+ chars; placeholder keys are short
+const clerkEnabled = !!(clerkKey && clerkKey.startsWith("pk_") && clerkKey.length > 40);
+
+function Providers({ children }: { children: React.ReactNode }) {
+  const inner = (
+    <ThemeProvider>
+      <SourceLanguageProvider>
+        <SavedPhrasesProvider>
+          {children}
+          <BottomNav />
+        </SavedPhrasesProvider>
+      </SourceLanguageProvider>
+    </ThemeProvider>
+  );
+
+  if (clerkEnabled) {
+    return (
+      <ClerkProvider>
+        <ClerkAuthProvider>
+          {inner}
+        </ClerkAuthProvider>
+      </ClerkProvider>
+    );
+  }
+
+  return <NoAuthProvider>{inner}</NoAuthProvider>;
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -60,16 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${jakarta.variable} font-sans antialiased min-h-screen bg-[#faf8f5] text-[#1d1d1f] dark:bg-[#09090b] dark:text-[#f5f5f7]`}>
-        <ClerkProvider>
-          <ThemeProvider>
-            <SourceLanguageProvider>
-              <SavedPhrasesProvider>
-                {children}
-                <BottomNav />
-              </SavedPhrasesProvider>
-            </SourceLanguageProvider>
-          </ThemeProvider>
-        </ClerkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

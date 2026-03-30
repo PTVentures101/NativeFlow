@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useState } from "react";
 
 interface UpgradePromptProps {
@@ -10,8 +10,7 @@ interface UpgradePromptProps {
 }
 
 export function UpgradePrompt({ usageCount, dailyLimit }: UpgradePromptProps) {
-  const { isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
+  const { isSignedIn, openSignIn } = useAuthContext();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -65,7 +64,7 @@ export function UpgradePrompt({ usageCount, dailyLimit }: UpgradePromptProps) {
                 {dailyLimit - usageCount} free {dailyLimit - usageCount === 1 ? "check" : "checks"} left today
               </p>
               <p className="text-xs text-[#86868b] leading-relaxed">
-                Upgrade to Pro for unlimited checks — no daily cap, ever.
+                Upgrade to Pro for unlimited checks - no daily cap, ever.
               </p>
             </>
           )}
@@ -79,7 +78,7 @@ export function UpgradePrompt({ usageCount, dailyLimit }: UpgradePromptProps) {
           {loading ? (
             <Spinner />
           ) : (
-            <>Upgrade · £4.99<span className="font-normal opacity-80">/mo</span></>
+            <>Upgrade &middot; £4.99<span className="font-normal opacity-80">/mo</span></>
           )}
         </button>
       </div>

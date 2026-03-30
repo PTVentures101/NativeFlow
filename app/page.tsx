@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 import { SmartBar } from "@/components/SmartBar";
 import { LocationBar } from "@/components/LocationBar";
@@ -65,8 +65,7 @@ const EXAMPLE_CHIP = "border-black/[0.10] bg-black/[0.03] dark:border-white/[0.1
 
 export default function Home() {
   const { sourceLang } = useSourceLanguageContext();
-  const { user, isLoaded } = useUser();
-  const isPro = isLoaded && (user?.publicMetadata?.tier as string) === "pro";
+  const { isPro } = useAuthContext();
 
   const [activeTab, setActiveTab] = useState<"check" | "phrases">("check");
   const [query, setQuery] = useState("");

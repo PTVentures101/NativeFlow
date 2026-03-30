@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
 const TIERS = [
@@ -65,8 +65,7 @@ const TESTIMONIALS = [
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const { isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
+  const { isSignedIn, openSignIn } = useAuthContext();
   const router = useRouter();
 
   async function handleProCta() {

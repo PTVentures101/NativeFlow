@@ -1,9 +1,9 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 function getTodayCount(): number {
   try {
@@ -15,7 +15,7 @@ function getTodayCount(): number {
 }
 
 function AccountContent() {
-  const { user, isLoaded } = useUser();
+  const { isLoaded, isSignedIn, isPro, email } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
   const upgraded = searchParams.get("upgraded") === "true";
@@ -24,13 +24,11 @@ function AccountContent() {
   const [portalLoading, setPortalLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const isPro = isLoaded && (user?.publicMetadata?.tier as string) === "pro";
-
   useEffect(() => {
-    if (isLoaded && !user) {
+    if (isLoaded && !isSignedIn) {
       router.replace("/sign-in");
     }
-  }, [isLoaded, user, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     setUsageToday(getTodayCount());
@@ -58,7 +56,7 @@ function AccountContent() {
     }
   }
 
-  if (!isLoaded || !user) {
+  if (!isLoaded || !isSignedIn) {
     return (
       <div className="animate-pulse space-y-4">
         <div className="h-8 bg-black/[0.06] dark:bg-white/[0.06] rounded-xl w-48" />
@@ -121,7 +119,7 @@ function AccountContent() {
         <div className="border-t border-black/[0.06] dark:border-white/[0.06] pt-4">
           {isPro ? (
             <div className="flex items-center gap-2 text-sm text-[#1d1d1f] dark:text-[#f5f5f7]">
-              <span className="text-emerald-500">✓</span>
+              <span className="text-emerald-500">checkmark</span>
               <span>Unlimited checks - no daily cap</span>
             </div>
           ) : (
@@ -143,12 +141,12 @@ function AccountContent() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.04] shadow-sm dark:shadow-none p-6">
-        <p className="text-xs text-[#86868b] mb-3">Account</p>
-        <p className="text-sm text-[#1d1d1f] dark:text-[#f5f5f7]">
-          {user.primaryEmailAddress?.emailAddress}
-        </p>
-      </div>
+      {email && (
+        <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.04] shadow-sm dark:shadow-none p-6">
+          <p className="text-xs text-[#86868b] mb-3">Account</p>
+          <p className="text-sm text-[#1d1d1f] dark:text-[#f5f5f7]">{email}</p>
+        </div>
+      )}
     </>
   );
 }
