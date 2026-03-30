@@ -32,7 +32,7 @@ interface GetPhrasesTabProps {
 export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLimit, isPro, onUsageIncrement }: GetPhrasesTabProps) {
   const { sourceLang } = useSourceLanguageContext();
   const [situation, setSituation] = useState("");
-  const [targetLanguage, setTargetLanguage] = useState<string>("Spanish");
+  const [targetLanguage, setTargetLanguage] = useState<string>("");
   const [tabState, setTabState] = useState<TabState>("idle");
   const [phrases, setPhrases] = useState<SituationalPhrase[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +41,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
 
   const handleSubmit = useCallback(async () => {
     const trimmed = situation.trim();
-    if (trimmed.length < 10 || tabState === "loading") return;
+    if (trimmed.length < 10 || tabState === "loading" || !targetLanguage) return;
     setTabState("loading");
     setPhrases([]);
     setErrorMessage("");
@@ -228,7 +228,7 @@ function TargetLanguagePicker({ value, onChange }: TargetLanguagePickerProps) {
         className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.04] shadow-sm dark:shadow-none transition-all duration-200 hover:border-indigo-400/60 dark:hover:border-indigo-400/40"
       >
         <span className="shrink-0 text-[#86868b]"><GlobeIcon /></span>
-        <span className="flex-1 text-left text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">{value}</span>
+        <span className={`flex-1 text-left text-sm ${value ? "text-[#1d1d1f] dark:text-[#f5f5f7]" : "text-[#86868b] dark:text-[#6c6c70]"}`}>{value || "Language"}</span>
         <span className="text-[#86868b]"><ChevronIcon open={isOpen} /></span>
       </button>
 
