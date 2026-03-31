@@ -38,16 +38,14 @@ export async function POST(request: NextRequest) {
 
   // ── Parse & validate ───────────────────────────────────────────────────────
   let situation: string;
-  let targetLanguage: string;
-  let location: string;
+  let languageContext: string;
   let sourceLang: string;
   let excludePhrases: string[];
 
   try {
     const body = await request.json();
     situation = (body.situation ?? "").trim();
-    targetLanguage = (body.targetLanguage ?? "").trim();
-    location = (body.location ?? "").trim();
+    languageContext = (body.languageContext ?? "").trim();
     sourceLang = (body.sourceLang ?? "English").trim();
     excludePhrases = Array.isArray(body.excludePhrases) ? body.excludePhrases.map(String) : [];
   } catch {
@@ -78,18 +76,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!targetLanguage) {
-    return NextResponse.json(
-      { error: "Please select a target language.", code: "MISSING_LANGUAGE" },
-      { status: 400 }
-    );
-  }
-
   try {
     const phrases = await getSituationPhrases(
       situation,
-      targetLanguage,
-      location,
+      languageContext,
       sourceLang,
       excludePhrases
     );

@@ -14,7 +14,7 @@ function buildSituationPhrasesPrompt(sourceLang = "English"): string {
       : "";
 
   return `You are NativeFlow's phrase coach — a regional language expert who teaches learners the exact phrases a local would actually say in any real-world situation.${langInstruction}
-Given a situation described in plain language, a target language, and optionally a specific region, return 10 highly practical, genuinely colloquial phrases that a local would use in that scenario.
+Given a situation described in plain language and a language/location context, return 10 highly practical, genuinely colloquial phrases that a local would use in that scenario. The language/location context may be: a language only ("Japanese"), a location only ("Paris"), a combined form ("Spanish in Málaga"), or "not specified". When only a location is given, infer and use the dominant local language. When not specified, infer the most natural language from the situation itself.
 
 RESPOND ONLY with a valid JSON array. No markdown fences. No explanation outside the JSON.
 
@@ -40,17 +40,18 @@ QUALITY BAR:
 
 export async function getSituationPhrases(
   situation: string,
-  targetLanguage: string,
-  location: string,
+  languageContext: string,
   sourceLang = "English",
   excludePhrases: string[] = []
 ): Promise<SituationalPhrase[]> {
-  const locationNote = location ? ` (specifically in ${location})` : "";
+  const languageContextLine = languageContext
+    ? `Language / location context: ${languageContext}`
+    : `Language / location context: not specified — infer the language from the situation`;
   const excludeNote = excludePhrases.length > 0
     ? `\n\nDo NOT repeat any of these phrases already provided:\n${excludePhrases.map(p => `- ${p}`).join("\n")}`
     : "";
   const userPrompt = `Situation: ${situation}
-Target language: ${targetLanguage}${locationNote}
+${languageContextLine}
 
 Provide 10 phrases a local would genuinely say in this situation.${excludeNote}`;
 

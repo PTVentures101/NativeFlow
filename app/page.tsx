@@ -141,16 +141,14 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ── Location bar (shared between tabs) ────────────── */}
-        <div className="mb-4">
-          <LocationBar value={location} onChange={setLocation} />
-        </div>
-
         {/* ── Tab switcher ──────────────────────────────────── */}
         <TabBar active={activeTab} onChange={setActiveTab} />
 
         {/* ── Check a Phrase tab ────────────────────────────── */}
         <div className={activeTab === "check" ? "" : "hidden"}>
+          <div className="mb-4">
+            <LocationBar value={location} onChange={setLocation} />
+          </div>
           <div className="mb-4">
             <SmartBar value={query} onChange={setQuery} onSubmit={handleSubmit} isLoading={appState === "loading"} />
           </div>
@@ -204,8 +202,6 @@ export default function Home() {
         {/* Kept mounted at all times so state persists when switching tabs */}
         <div className={activeTab === "phrases" ? "" : "hidden"}>
           <GetPhrasesTab
-            location={location}
-            onLocationChange={setLocation}
             usageCount={usageCount}
             dailyLimit={DAILY_LIMIT}
             isPro={isPro}

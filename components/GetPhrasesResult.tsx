@@ -8,8 +8,7 @@ import { SpeakerIcon, StopIcon } from "./icons";
 
 interface GetPhrasesResultProps {
   phrases: SituationalPhrase[];
-  targetLanguage: string;
-  location: string;
+  languageContext: string;
   situation: string;
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
@@ -17,8 +16,7 @@ interface GetPhrasesResultProps {
 
 export function GetPhrasesResult({
   phrases,
-  targetLanguage,
-  location,
+  languageContext,
   situation,
   onLoadMore,
   isLoadingMore,
@@ -34,27 +32,22 @@ export function GetPhrasesResult({
       }
       speakText(
         phrase.phrase,
-        targetLanguage,
-        location || undefined,
+        languageContext,
+        undefined,
         () => setPlayingIdx(idx),
         () => setPlayingIdx(null)
       );
     },
-    [playingIdx, targetLanguage, location]
+    [playingIdx, languageContext]
   );
-
-  const regionLabel = location ? location.split(",")[0].trim() : null;
 
   return (
     <div>
       {/* Header badges */}
       <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
-          {targetLanguage}
-        </span>
-        {regionLabel && (
+        {languageContext && (
           <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
-            {regionLabel}
+            {languageContext}
           </span>
         )}
         <span className="inline-flex items-center text-[10px] font-medium text-[#86868b] bg-black/5 dark:bg-white/5 rounded-full px-2.5 py-0.5">
@@ -108,8 +101,8 @@ export function GetPhrasesResult({
                     phrase: p.phrase,
                     gloss: p.gloss,
                     note: p.note,
-                    detectedLanguage: targetLanguage,
-                    detectedRegion: location || targetLanguage,
+                    detectedLanguage: languageContext,
+                    detectedRegion: languageContext,
                     sourceQuery: situation,
                   }}
                 />

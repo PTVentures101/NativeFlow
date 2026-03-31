@@ -1,38 +1,32 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import type { SituationalPhrase } from "@/lib/get-phrases";
-import { SOURCE_LANGUAGES } from "@/hooks/useSourceLanguage";
 import { useSourceLanguageContext } from "@/contexts/SourceLanguageContext";
 import { GetPhrasesResult } from "./GetPhrasesResult";
 import { QueryInput } from "@/components/QueryInput";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 
-// All languages except English — user wants phrases *in* a foreign language
-const TARGET_LANGUAGES = SOURCE_LANGUAGES.filter((l) => l !== "English");
-
-const EXAMPLES: { label: string; situation: string; language: string; location: string }[] = [
-  { label: "Going to a bar in Málaga with friends", situation: "Going to a bar in Málaga with friends", language: "Spanish", location: "Málaga" },
-  { label: "Ordering food at a market in Mexico City", situation: "Ordering food at a market in Mexico City", language: "Spanish", location: "Mexico City" },
-  { label: "My French-speaking neighbour pops round", situation: "My French-speaking neighbour pops round unexpectedly", language: "French", location: "" },
-  { label: "Having dinner at a restaurant in Tokyo", situation: "Having dinner at a restaurant in Tokyo", language: "Japanese", location: "Tokyo" },
+const EXAMPLES: { label: string; situation: string; languageContext: string }[] = [
+  { label: "Going to a bar in Málaga with friends", situation: "Going to a bar in Málaga with friends", languageContext: "Spanish in Málaga" },
+  { label: "Ordering food at a market in Mexico City", situation: "Ordering food at a market in Mexico City", languageContext: "Spanish in Mexico City" },
+  { label: "My French-speaking neighbour pops round", situation: "My French-speaking neighbour pops round unexpectedly", languageContext: "French" },
+  { label: "Having dinner at a restaurant in Tokyo", situation: "Having dinner at a restaurant in Tokyo", languageContext: "Japanese in Tokyo" },
 ];
 
 type TabState = "idle" | "loading" | "result" | "error";
 
 interface GetPhrasesTabProps {
-  location: string;
-  onLocationChange: (location: string) => void;
   usageCount: number;
   dailyLimit: number;
   isPro: boolean;
   onUsageIncrement: () => void;
 }
 
-export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLimit, isPro, onUsageIncrement }: GetPhrasesTabProps) {
+export function GetPhrasesTab({ usageCount, dailyLimit, isPro, onUsageIncrement }: GetPhrasesTabProps) {
   const { sourceLang } = useSourceLanguageContext();
   const [situation, setSituation] = useState("");
-  const [targetLanguage, setTargetLanguage] = useState<string>("");
+  const [languageContext, setLanguageContext] = useState("");
   const [tabState, setTabState] = useState<TabState>("idle");
   const [phrases, setPhrases] = useState<SituationalPhrase[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +35,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
 
   const handleSubmit = useCallback(async () => {
     const trimmed = situation.trim();
-    if (trimmed.length < 10 || tabState === "loading" || !targetLanguage) return;
+    if (trimmed.length < 10 || tabState === "loading") return;
     setTabState("loading");
     setPhrases([]);
     setErrorMessage("");
@@ -52,8 +46,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           situation: trimmed,
-          targetLanguage,
-          location: location.trim(),
+          languageContext: languageContext.trim(),
           sourceLang,
         }),
       });
@@ -70,7 +63,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
       setErrorMessage("Network error. Check your connection and try again.");
       setTabState("error");
     }
-  }, [situation, targetLanguage, location, sourceLang, tabState, isPro, onUsageIncrement]);
+  }, [situation, languageContext, sourceLang, tabState, isPro, onUsageIncrement]);
 
   const handleLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -81,8 +74,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           situation: submittedSituation,
-          targetLanguage,
-          location: location.trim(),
+          languageContext: languageContext.trim(),
           sourceLang,
           excludePhrases: phrases.map((p) => p.phrase),
         }),
@@ -96,7 +88,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
     } finally {
       setIsLoadingMore(false);
     }
-  }, [isLoadingMore, submittedSituation, targetLanguage, location, sourceLang, phrases]);
+  }, [isLoadingMore, submittedSituation, languageContext, sourceLang, phrases]);
 
   const reset = () => {
     setSituation("");
@@ -110,7 +102,30 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
     <div className="flex flex-col gap-4">
       {/* Input area — always visible so switching tabs doesn't lose the form */}
       <div className={`flex flex-col gap-2 ${tabState === "result" ? "hidden" : ""}`}>
-        <TargetLanguagePicker value={targetLanguage} onChange={setTargetLanguage} />
+        {/* Language and location input */}
+        <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.04] shadow-sm dark:shadow-none transition-all duration-200 focus-within:border-indigo-400/60 dark:focus-within:border-indigo-400/40 focus-within:shadow-[0_0_0_3px_rgba(99,102,241,0.08)]">
+          <span className="shrink-0 text-[#86868b]"><GlobeIcon /></span>
+          <input
+            type="text"
+            value={languageContext}
+            onChange={(e) => setLanguageContext(e.target.value)}
+            placeholder="Language and Location (e.g. Spanish in Málaga)"
+            maxLength={80}
+            spellCheck={false}
+            className="flex-1 bg-transparent text-sm leading-none text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#6c6c70] focus:outline-none"
+          />
+          {languageContext && (
+            <button
+              onClick={() => setLanguageContext("")}
+              aria-label="Clear language and location"
+              className="shrink-0 flex items-center justify-center w-4 h-4 rounded-full bg-black/[0.08] dark:bg-white/10 text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors"
+            >
+              <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          )}
+        </div>
 
         <QueryInput
           value={situation}
@@ -136,7 +151,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
             {EXAMPLES.map((ex) => (
               <button
                 key={ex.label}
-                onClick={() => { setSituation(ex.situation); setTargetLanguage(ex.language); if (ex.location) onLocationChange(ex.location); }}
+                onClick={() => { setSituation(ex.situation); setLanguageContext(ex.languageContext); }}
                 className="text-left text-xs font-medium px-3 py-1.5 rounded-full border transition-colors leading-relaxed border-black/[0.10] bg-black/[0.03] dark:border-white/[0.10] dark:bg-white/[0.03] text-[#6c6c70] dark:text-[#86868b] hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400/30 hover:bg-indigo-500/[0.04]"
               >
                 {ex.label}
@@ -164,8 +179,7 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
         <>
           <GetPhrasesResult
             phrases={phrases}
-            targetLanguage={targetLanguage}
-            location={location}
+            languageContext={languageContext}
             situation={submittedSituation}
             onLoadMore={handleLoadMore}
             isLoadingMore={isLoadingMore}
@@ -202,65 +216,6 @@ export function GetPhrasesTab({ location, onLocationChange, usageCount, dailyLim
   );
 }
 
-// ── Target language picker ────────────────────────────────────────────────────
-
-interface TargetLanguagePickerProps {
-  value: string;
-  onChange: (lang: string) => void;
-}
-
-function TargetLanguagePicker({ value, onChange }: TargetLanguagePickerProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setIsOpen((o) => !o)}
-        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.04] shadow-sm dark:shadow-none transition-all duration-200 hover:border-indigo-400/60 dark:hover:border-indigo-400/40"
-      >
-        <span className="shrink-0 text-[#86868b]"><GlobeIcon /></span>
-        <span className={`flex-1 text-left text-sm ${value ? "text-[#1d1d1f] dark:text-[#f5f5f7]" : "text-[#86868b] dark:text-[#6c6c70]"}`}>{value || "Language"}</span>
-        <span className="text-[#86868b]"><ChevronIcon open={isOpen} /></span>
-      </button>
-
-      {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#18181b] shadow-xl shadow-black/[0.12] dark:shadow-black/40 py-1.5 overflow-hidden max-h-64 overflow-y-auto">
-          <p className="px-3 pt-1 pb-2 text-[10px] font-semibold uppercase tracking-widest text-[#86868b]">
-            Language
-          </p>
-          {TARGET_LANGUAGES.map((lang) => (
-            <button
-              key={lang}
-              onClick={() => {
-                onChange(lang);
-                setIsOpen(false);
-              }}
-              className={`w-full text-left px-3 py-2 text-[12px] flex items-center justify-between gap-2 transition-colors
-                ${
-                  lang === value
-                    ? "text-indigo-500 dark:text-indigo-400 bg-indigo-500/[0.06]"
-                    : "text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.04] dark:hover:bg-white/[0.04]"
-                }`}
-            >
-              {lang}
-              {lang === value && <CheckIcon />}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
 function GlobeIcon() {
@@ -277,41 +232,6 @@ function GlobeIcon() {
     >
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
-
-function ChevronIcon({ open }: { open: boolean }) {
-  return (
-    <svg
-      width="9"
-      height="9"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-    >
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
