@@ -30,12 +30,18 @@ FIELD RULES:
 
 QUALITY BAR:
 - Phrases must be genuinely useful in the described situation — what a local would actually say
-- Prefer phrases a textbook would never teach: contractions, colloquial shortcuts, local idioms
+- Default to natural, everyday spoken language — not slang, not textbook formal
+- Slang and idioms only when the situation clearly calls for it (e.g. casual pub with friends)
 - Each phrase should cover a different micro-moment in the scenario
-- Match the register implied by the situation (casual bar = casual phrases; formal meeting = formal)
+- Match the register implied by the situation (casual bar = casual; formal meeting = formal)
 - No generic filler phrases unless genuinely scenario-relevant
-- Banned words in notes/gloss: "vibrant", "authentic", "essence", "nuanced", "rich", "energy", "pure"
-- Avoid em dashes (—). Use commas or short sentences instead.`;
+
+LANGUAGE STYLE:
+- Write phrases and notes as a human expert, not an AI assistant
+- No em dashes (—). Use commas or short sentences instead.
+- Banned words everywhere: "vibrant", "authentic", "essence", "nuanced", "rich", "energy", "pure", "delve", "straightforward", "seamlessly", "leverage", "robust", "elevate", "foster", "utilize"
+- Notes must read like a tip from a friend, not a textbook caption
+- Avoid overly poetic or unusual phrasing — clarity over flair`;
 }
 
 export async function getSituationPhrases(

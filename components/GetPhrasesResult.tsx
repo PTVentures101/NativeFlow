@@ -64,7 +64,7 @@ export function GetPhrasesResult({
           >
             {/* Category chip */}
             {p.category && (
-              <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 bg-amber-500/10 rounded px-2 py-0.5 mb-2 leading-none">
+              <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 rounded px-2 py-0.5 mb-2 leading-none">
                 {p.category}
               </span>
             )}
