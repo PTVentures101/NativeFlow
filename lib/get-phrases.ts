@@ -30,10 +30,10 @@ FIELD RULES:
 
 QUALITY BAR:
 - Phrases must be genuinely useful in the described situation — what a local would actually say
-- Default to natural, everyday spoken language — not slang, not textbook formal
-- Slang and idioms only when the situation clearly calls for it (e.g. casual pub with friends)
+- Default to polite, natural everyday language — courteous but not stiff
+- Slang and casual shortcuts only when the situation explicitly calls for it (e.g. casual pub with close friends)
 - Each phrase should cover a different micro-moment in the scenario
-- Match the register implied by the situation (casual bar = casual; formal meeting = formal)
+- When in doubt, err on the side of polite — a learner being too formal is fine; being rude is not
 - No generic filler phrases unless genuinely scenario-relevant
 
 LANGUAGE STYLE:
