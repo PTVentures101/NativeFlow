@@ -109,7 +109,7 @@ export function GetPhrasesTab({ usageCount, dailyLimit, isPro, onUsageIncrement 
             type="text"
             value={languageContext}
             onChange={(e) => setLanguageContext(e.target.value)}
-            placeholder="Language and Location (e.g. Spanish in Málaga)"
+            placeholder="Language and Location"
             maxLength={80}
             spellCheck={false}
             className="flex-1 bg-transparent text-sm leading-none text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#6c6c70] focus:outline-none"
